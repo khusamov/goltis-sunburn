@@ -3,7 +3,6 @@
 
 const gulp = require('gulp');
 const jade = require('gulp-jade');
-//const notify = require('gulp-notify');
 const babel = require('gulp-babel');
 const browserSync = require('browser-sync');
 const concat = require('gulp-concat');
@@ -52,7 +51,7 @@ gulp.task('js', none => {
 		.pipe(babel({
 			presets: ['es2016']
 		}))
-		.pipe(src.prepend('lib/jQuery-Timer-Plugin/jquery.timer.js'))
+		.pipe(src.prepend(['lib/jQuery-Timer-Plugin/jquery.timer.js', 'node_modules/notifyjs/dist/notify.js']))
 		.pipe(concat('all.js'))
 		.pipe(uglify())
 		.pipe(gulp.dest('build'))

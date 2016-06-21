@@ -15,7 +15,13 @@ const message = [
 	'Отдыхаем в тени'
 ];
 
-const sound = [];
+const sound = [
+	'http://rington4ik.info/uploads/files/1303461245_blackberry_cute_sms.mp3',
+	'http://rington4ik.info/uploads/files/1303461292_soft_sms_2011.mp3',
+	'http://rington4ik.info/uploads/files/1303461232_tic_tic_sms.mp3',
+	'http://rington4ik.info/uploads/files/1303461232_tic_tic_sms.mp3',
+	'http://rington4ik.info/uploads/files/1303461227_guitar_no_1_sms_2011.mp3'
+];
 
 let state = 'stoped';
 
@@ -44,27 +50,63 @@ function prepareGoltisSunburnData(data) {
 
 function startSunburning(message, data) {
 	let loop = 0, phase = 0;
-	
-	$('p#message').text(`${message[phase]} ${data[loop][phase]} минуты.`);
-	
-	const timer = $.timer(data[loop][phase] * 60000, none => {
+	setMessage(loop, phase);
+	const timeScale = 60000; // Число миллисекунд в одной минуте.
+	const timer = $.timer(data[loop][phase] * timeScale, none => {
 		phase++;
-		
 		if (phase > 4) {
 			phase = 0;
 			loop++;
 		}
-		
-		if (loop > data.length - 1) {
-			
+		if (loop < data.length) {
+			setMessage(loop, phase);
+			$('audio').attr('src', sound[phase]).get(0).play();
+			timer.reset(data[loop][phase] * timeScale);
+		} else {
+			state = 'stoped';
 		}
-		
-		
-		
-		$('p#message').text(`${message[phase]} ${data[loop][phase]} минуты.`);
-		
-		timer.reset(data[loop][phase]);
-		
-		
 	});
+}
+
+function setMessage(loop, phase) {
+	let pMessage = $('p#message');
+	pMessage.text(`Цикл ${loop + 1}: ${message[phase]} ${goltisSunburnData[loop][phase]} минут(ы).`);
+}
+
+/**
+ * Уведомления в браузере.
+ */
+
+		
+var Notify = window.Notify.default;
+
+var myNotification = new Notify('КУКУ!', {
+	icon: 'https://healthspirit.ru/wp-content/uploads/2016/01/TWVaq0BceTA.jpg',
+    body: 'Привет, это я, ваше уведомление!'
+});
+
+	
+		
+		
+if (!Notify.needsPermission) {
+    doNotification()
+} else if (Notify.isSupported()) {
+    Notify.requestPermission(onPermissionGranted, onPermissionDenied);
+}
+
+function onPermissionGranted() {
+    console.log('Permission has been granted by the user');
+    doNotification()
+}
+
+function onPermissionDenied() {
+    console.warn('Permission has been denied by the user');
+}
+
+function doNotification() {
+	/*const timer = $.timer(5000, none => {
+		myNotification.show();
+		timer.reset(5000);
+		console.log("doNotification");
+	});*/
 }
