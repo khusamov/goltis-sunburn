@@ -51,7 +51,11 @@ gulp.task('js', none => {
 		.pipe(babel({
 			presets: ['es2016']
 		}))
-		.pipe(src.prepend(['lib/jQuery-Timer-Plugin/jquery.timer.js', 'node_modules/notifyjs/dist/notify.js']))
+		.pipe(src.prepend([
+			'node_modules/jquery/dist/jquery.js',
+			'lib/jQuery-Timer-Plugin/jquery.timer.js',
+			'node_modules/notifyjs/dist/notify.js'
+		]))
 		.pipe(concat('all.js'))
 		.pipe(uglify())
 		.pipe(gulp.dest('build'))

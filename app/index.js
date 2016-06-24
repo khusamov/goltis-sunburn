@@ -26,6 +26,16 @@ const sound = [
 let state = 'stoped';
 
 $(onready => {
+	onDeviceReady();
+});
+
+document.addEventListener('deviceready', onDeviceReady, false); // Для Cordova.
+
+/**
+ * Разные функции программы.
+ */
+
+function onDeviceReady() {
 	$('button#start').click(none => {
 		switch (state) {
 			case 'stoped':
@@ -34,7 +44,7 @@ $(onready => {
 				break;
 		}
 	});
-});
+}
 
 function prepareGoltisSunburnData(data) {
 	return (
@@ -51,7 +61,7 @@ function prepareGoltisSunburnData(data) {
 function startSunburning(message, data) {
 	let loop = 0, phase = 0;
 	setMessage(loop, phase);
-	const timeScale = 60000; // Число миллисекунд в одной минуте.
+	const timeScale = 600; // Число миллисекунд в одной минуте.
 	const timer = $.timer(data[loop][phase] * timeScale, none => {
 		phase++;
 		if (phase > 4) {

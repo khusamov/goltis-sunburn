@@ -17,6 +17,7 @@
     "email": "khusamov@yandex.ru"
   },
   "dependencies": {
+    "jquery": "^3.0.0",
     "notifyjs": "^2.0.2"
   },
   "devDependencies": {
