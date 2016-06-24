@@ -23,7 +23,7 @@ const sound = [
 	'1303461227_guitar_no_1_sms_2011.mp3'
 ];
 
-const timeScale = 600; // Число миллисекунд в одной минуте.
+const timeScale = 60000; // Число миллисекунд в одной минуте.
 let loop = 0, phase = 0;
 let state = 'stoped', timer;
 
