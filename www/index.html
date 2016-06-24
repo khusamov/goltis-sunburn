@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+        <link rel="stylesheet" type="text/css" href="css/index.css">
+        <title>Схема загара по Голтису</title>
+        
+        
+        <script src="https://code.jquery.com/jquery-3.0.0.min.js" type="text/javascript" charset="utf-8"></script>
+        <style>
+          body {
+          	background-color: #fff5df;
+          }
+          #start {
+          	padding: 10px 20px;
+          }
+          
+        </style>
+        
+    </head>
+    <body>
+        <div class="app">
+            <div id="deviceready" class="blink">
+                <p class="event listening">Connecting to Device</p>
+                <p class="event received">Device is Ready</p>
+            </div>
+            
+            <h1>Схема загара по Голтису</h1>
+            <h2>Или как загореть за один день</h2>
+            <p>
+              Данное приложение делает удобных загорание по методу Голтиса.
+              Просто нажмите кнопку «Старт» и начинайте загорать. 
+              Когда по графику потребуется поменять позицию вы услышите звуковой сигнал.
+              
+            </p>
+            <audio></audio>
+            <button id="start">Старт</button>
+            <p id="message">Нажмите старт!</p>
+            
+        </div>
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+        <script type="text/javascript" src="goltis/all.js"></script>
+    </body>
+</html>

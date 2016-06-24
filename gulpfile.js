@@ -53,8 +53,8 @@ gulp.task('js', none => {
 		}))
 		.pipe(src.prepend([
 			'node_modules/jquery/dist/jquery.js',
-			'lib/jQuery-Timer-Plugin/jquery.timer.js',
-			'node_modules/notifyjs/dist/notify.js'
+			'node_modules/notifyjs/dist/notify.js',
+			'lib/jQuery-Timer-Plugin/jquery.timer.js'
 		]))
 		.pipe(concat('all.js'))
 		.pipe(uglify())
