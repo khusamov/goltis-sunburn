@@ -4,10 +4,19 @@ doctype html
 html
 
 	head
-		title Схема загара по Голтису или как загореть за один день
-		meta(name='viewport', content='width=device-width, initial-scale=1')
-		//-script(src='https://code.jquery.com/jquery-3.0.0.min.js', type='text/javascript', charset='utf-8')
+	
+		meta(http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *")
+		meta(name="format-detection" content="telephone=no")
+		meta(name="msapplication-tap-highlight" content="no")
+		script(src='cordova.js', type='text/javascript')
+		link(rel="stylesheet" type="text/css" href="css/index.css")
+		
+	
+		title Загар по Голтису или как загореть за один день
+		meta(name='viewport', content='user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width')
+		
 		script(src='all.js', type='text/javascript', charset='utf-8')
+		
 		
 		style.
 			body {
@@ -16,17 +25,24 @@ html
 			#start {
 				padding: 10px 20px;
 			}
+			select#loop {
+				margin-right: 7px;
+				padding: 5px 10px;
+			}
 		
 	body
-		h1 Схема загара по Голтису
-		h2 Или как загореть за один день
-		
-		p.
-			Данное приложение делает удобных загорание по методу Голтиса.
-			Просто нажмите кнопку «Старт» и начинайте загорать. 
-			Когда по графику потребуется поменять позицию вы услышите звуковой сигнал.
-		
-		audio
-		button#start Старт
-		
-		p#message Нажмите старт!
+		div.app
+			h1 Загар по Голтису
+			p.
+				Данное приложение делает удобным загорание по методу Голтиса.
+				Просто нажмите кнопку «Старт» и начинайте загорать. 
+				Когда по графику потребуется поменять позицию вы услышите звуковой сигнал.
+			
+			audio
+			button#start Старт
+			
+			p
+				select#loop
+			
+			p
+				span#message Нажмите старт!

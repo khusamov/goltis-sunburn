@@ -9,7 +9,7 @@ const concat = require('gulp-concat');
 const src = require('gulp-add-src');
 const uglify = require('gulp-uglify');
 
-gulp.task('default', ['watch', 'browserSync']);
+gulp.task('default', ['build', 'watch', 'browserSync']);
 
 /**
  * Специальные задачи.
@@ -18,12 +18,14 @@ gulp.task('default', ['watch', 'browserSync']);
 gulp.task('watch', none => {
 	gulp.watch('app/index.jade', ['index.jade']);
 	gulp.watch('app/index.js', ['js']);
+	gulp.watch('app/sounds/*.*', ['sounds']);
+	gulp.watch('app/css/*.*', ['css']);
 });
 
 gulp.task('browserSync', none => {
 	browserSync({
 		server: {
-			baseDir: "build"
+			baseDir: "www"
 		},
 		port: 8080,
 		open: true,
@@ -35,12 +37,14 @@ gulp.task('browserSync', none => {
  * Прикладные задачи.
  */
 
+gulp.task('build', ['index.jade', 'js', 'sounds', 'css']);
+
 gulp.task('index.jade', none => {
 	return gulp.src('app/index.jade')
 		.pipe(jade({
 			pretty: true
 		}))
-		.pipe(gulp.dest('build'))
+		.pipe(gulp.dest('www'))
 		.pipe(browserSync.reload({
 			stream: true
 		}));
@@ -58,7 +62,23 @@ gulp.task('js', none => {
 		]))
 		.pipe(concat('all.js'))
 		.pipe(uglify())
-		.pipe(gulp.dest('build'))
+		.pipe(gulp.dest('www'))
+		.pipe(browserSync.reload({
+			stream: true
+		}));
+});
+
+gulp.task('sounds', none => {
+	return gulp.src('app/sounds/*.*')
+		.pipe(gulp.dest('www/sounds'))
+		.pipe(browserSync.reload({
+			stream: true
+		}));
+});
+
+gulp.task('css', none => {
+	return gulp.src('app/css/*.*')
+		.pipe(gulp.dest('www/css'))
 		.pipe(browserSync.reload({
 			stream: true
 		}));

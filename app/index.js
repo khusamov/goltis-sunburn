@@ -16,18 +16,22 @@ const message = [
 ];
 
 const sound = [
-	'http://rington4ik.info/uploads/files/1303461245_blackberry_cute_sms.mp3',
-	'http://rington4ik.info/uploads/files/1303461292_soft_sms_2011.mp3',
-	'http://rington4ik.info/uploads/files/1303461232_tic_tic_sms.mp3',
-	'http://rington4ik.info/uploads/files/1303461232_tic_tic_sms.mp3',
-	'http://rington4ik.info/uploads/files/1303461227_guitar_no_1_sms_2011.mp3'
+	'1303461245_blackberry_cute_sms.mp3',
+	'1303461245_blackberry_cute_sms.mp3',
+	'1303461232_tic_tic_sms.mp3',
+	'1303461232_tic_tic_sms.mp3',
+	'1303461227_guitar_no_1_sms_2011.mp3'
 ];
 
-let state = 'stoped';
+const timeScale = 600; // Число миллисекунд в одной минуте.
+let loop = 0, phase = 0;
+let state = 'stoped', timer;
 
-$(onready => {
+
+// TODO сделать определение обычного браузера
+/*$(onready => {
 	onDeviceReady();
-});
+});*/
 
 document.addEventListener('deviceready', onDeviceReady, false); // Для Cordova.
 
@@ -36,11 +40,56 @@ document.addEventListener('deviceready', onDeviceReady, false); // Для Cordov
  */
 
 function onDeviceReady() {
-	$('button#start').click(none => {
+	
+	const buttonStart = $('button#start');
+	const selectLoop = $('select#loop');
+	
+	function createSunburnTimer() {
+		return new SunburnTimer(message, goltisSunburnData, {
+			onLoop: function(loop) {
+				selectLoop.val(loop);
+			},
+			onEnd: function() {
+				buttonStart.text('Старт');
+				state = 'stoped';
+			}
+		});
+	}
+	
+	timer = createSunburnTimer();
+	
+	goltisSunburnData.forEach((item, index) => {
+		selectLoop.append($('<option/>').attr('value', index).text(`Цикл № ${index + 1}`));
+	});
+	
+	selectLoop.change(none => {
+		loop = Number(selectLoop.val()), 
+		phase = 0;
+		timer.reset();
+		buttonStart.text('Старт');
+		state = 'stoped';
+		setMessage('Нажмите старт!');
+	});
+	
+	buttonStart.click(none => {
 		switch (state) {
 			case 'stoped':
-				state = 'start';
-				startSunburning(message, goltisSunburnData);
+				selectLoop.attr('disabled', 'disabled');
+				buttonStart.text('Пауза');
+				state = 'started';
+				timer.start();
+				break;
+			case 'started':
+				selectLoop.removeAttr('disabled');
+				buttonStart.text('Продолжить');
+				state = 'paused';
+				timer.pause();
+				break;
+			case 'paused':
+				selectLoop.attr('disabled', 'disabled');
+				buttonStart.text('Пауза');
+				state = 'started';
+				timer.resume();
 				break;
 		}
 	});
@@ -58,11 +107,8 @@ function prepareGoltisSunburnData(data) {
 	);
 }
 
-function startSunburning(message, data) {
-	let loop = 0, phase = 0;
-	setMessage(loop, phase);
-	const timeScale = 600; // Число миллисекунд в одной минуте.
-	const timer = $.timer(data[loop][phase] * timeScale, none => {
+function SunburnTimer(message, data, callback) {
+	const onTick = () => {
 		phase++;
 		if (phase > 4) {
 			phase = 0;
@@ -70,17 +116,40 @@ function startSunburning(message, data) {
 		}
 		if (loop < data.length) {
 			setMessage(loop, phase);
-			$('audio').attr('src', sound[phase]).get(0).play();
-			timer.reset(data[loop][phase] * timeScale);
+			$('audio').attr('src', 'sounds/' + sound[phase]).get(0).play();
+			this.timer.reset(data[loop][phase] * timeScale);
+			callback.onLoop(loop);
 		} else {
-			state = 'stoped';
+			callback.onEnd();
 		}
-	});
+	};
+	const createTimer = () => {
+		let interval = data[loop][phase] * timeScale;
+		return $.timer(interval, onTick, { reset: interval, disabled: true });
+	};
+	this.timer = createTimer();
+	this.pause = function() {
+		this.timer.pause();
+	};
+	this.resume = function() {
+		this.timer.resume();
+	};
+	this.stop = function() {
+		this.timer.stop();
+	};
+	this.reset = function() {
+		this.timer = createTimer();
+	};
+	this.start = function() {
+		setMessage(loop, phase);
+		$('audio').attr('src', 'sounds/' + sound[phase]).get(0).play();
+		this.timer.reset();
+	};
 }
 
 function setMessage(loop, phase) {
-	let pMessage = $('p#message');
-	pMessage.text(`Цикл ${loop + 1}: ${message[phase]} ${goltisSunburnData[loop][phase]} минут(ы).`);
+	let pMessage = $('#message');
+	pMessage.text(phase != undefined ? `${message[phase]} ${goltisSunburnData[loop][phase]} минут(ы).` : loop);
 }
 
 /**
